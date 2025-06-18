@@ -1,0 +1,222 @@
+body {
+  margin: 0;
+  font-family: 'Oswald', Arial, sans-serif;
+  background: #1a1818;
+  color: #fff;
+  min-width: 1200px; /* avoid mobile collapse for this style */
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 340px;
+  height: 100vh;
+  background: #252020;
+  border-right: 12px solid #e35e53;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 10;
+}
+
+.logo-area {
+  padding-top: 34px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.logo-circle {
+  border: 4px solid #e5cb77;
+  border-radius: 50%;
+  width: 225px;
+  height: 225px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.logo-main {
+  font-size: 1.7rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #e5cb77;
+  text-align: center;
+}
+.logo-sub {
+  font-size: 1.1rem;
+  color: #e5cb77;
+  letter-spacing: 1.5px;
+  text-align: center;
+  margin-top: 7px;
+}
+.logo-area hr {
+  width: 80%;
+  border: none;
+  border-bottom: 2px dashed #e5cb77;
+  margin-top: 14px;
+  margin-bottom: 0;
+}
+
+.nav-links {
+  margin-top: 22px;
+}
+.nav-links ul {
+  list-style: none;
+  padding: 0 0 0 30px;
+  margin: 0;
+}
+.nav-links li {
+  font-size: 1.35rem;
+  letter-spacing: 1px;
+  margin-bottom: 18px;
+}
+.nav-links li.active a,
+.nav-links li a:hover {
+  color: #e35e53;
+  font-weight: bold;
+}
+.nav-links a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.18s;
+}
+
+.sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 30px;
+  margin-bottom: 24px;
+}
+.social-icons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.social-icons img {
+  width: 32px;
+  height: 32px;
+  filter: invert(70%) sepia(94%) saturate(749%) hue-rotate(-17deg) brightness(1.1); /* stylized red */
+  transition: filter 0.18s;
+}
+.social-icons img:hover {
+  filter: invert(41%) sepia(46%) saturate(1497%) hue-rotate(-12deg) brightness(101%) contrast(110%);
+}
+.sidebar-link a {
+  color: #e5cb77;
+  background: #191717;
+  padding: 2px 7px;
+  font-size: 0.93rem;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.main-content {
+  margin-left: 340px;
+  min-height: 100vh;
+  background: #1a1818;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-image {
+  position: relative;
+  width: 100%;
+  height: 540px;
+  background: #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.carousel-arrows {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+.arrow {
+  background: rgba(0,0,0,0.35);
+  color: #fff;
+  font-size: 2.3rem;
+  padding: 0 15px;
+  border-radius: 7px;
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+.arrow:hover {
+  background: #e35e53;
+}
+.carousel-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 9px;
+}
+.dot {
+  width: 13px;
+  height: 13px;
+  background: #fff;
+  border-radius: 50%;
+  opacity: 0.4;
+  transition: opacity 0.2s;
+  cursor: pointer;
+}
+.dot.active {
+  opacity: 1;
+  background: #e35e53;
+  border: 2px solid #fff;
+}
+
+.category-bar {
+  width: 100%;
+  background: #181515;
+  display: flex;
+  justify-content: center;
+  border-bottom: 3px solid #292525;
+  margin-bottom: 0;
+}
+.category-bar ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  justify-content: space-evenly;
+}
+.category-bar li {
+  flex: 1;
+  text-align: center;
+  font-size: 1.25rem;
+  letter-spacing: 1px;
+  border-right: 1px solid #444;
+}
+.category-bar li:last-child {
+  border-right: none;
+}
+.category-bar a {
+  display: block;
+  color: #fff;
+  padding: 16px 0 14px 0;
+  text-decoration: none;
+  transition: background 0.18s, color 0.18s;
+}
+.category-bar a:hover,
+.category-bar li.active a {
+  background: #222;
+  color: #e5cb77;
+  font-weight: bold;
+}
