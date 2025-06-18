@@ -1,9 +1,9 @@
 body {
   margin: 0;
   font-family: 'Oswald', Arial, sans-serif;
-  background: #1a1818;
+  background: #000B47;
   color: #fff;
-  min-width: 1200px; /* avoid mobile collapse for this style */
+  min-width: 1200px;
 }
 
 .sidebar {
@@ -12,12 +12,13 @@ body {
   left: 0;
   width: 340px;
   height: 100vh;
-  background: #252020;
-  border-right: 12px solid #e35e53;
+  background: #000B47;
+  border-right: 12px solid #000;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   z-index: 10;
+  color: #fff;
 }
 
 .logo-area {
@@ -27,7 +28,7 @@ body {
   align-items: center;
 }
 .logo-circle {
-  border: 4px solid #e5cb77;
+  border: 4px solid #fff;
   border-radius: 50%;
   width: 225px;
   height: 225px;
@@ -36,17 +37,18 @@ body {
   align-items: center;
   justify-content: center;
   margin-bottom: 14px;
+  background: #000;
 }
 .logo-main {
   font-size: 1.7rem;
   font-weight: bold;
   letter-spacing: 2px;
-  color: #e5cb77;
+  color: #fff;
   text-align: center;
 }
 .logo-sub {
   font-size: 1.1rem;
-  color: #e5cb77;
+  color: #fff;
   letter-spacing: 1.5px;
   text-align: center;
   margin-top: 7px;
@@ -54,7 +56,7 @@ body {
 .logo-area hr {
   width: 80%;
   border: none;
-  border-bottom: 2px dashed #e5cb77;
+  border-bottom: 2px dashed #fff;
   margin-top: 14px;
   margin-bottom: 0;
 }
@@ -71,16 +73,23 @@ body {
   font-size: 1.35rem;
   letter-spacing: 1px;
   margin-bottom: 18px;
+  font-weight: 400;
 }
 .nav-links li.active a,
 .nav-links li a:hover {
-  color: #e35e53;
+  color: #fff;
+  background: #000;
   font-weight: bold;
+  border-radius: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 .nav-links a {
   color: #fff;
   text-decoration: none;
-  transition: color 0.18s;
+  transition: color 0.18s, background 0.18s;
+  display: block;
+  padding: 2px 0;
 }
 
 .sidebar-footer {
@@ -98,15 +107,19 @@ body {
 .social-icons img {
   width: 32px;
   height: 32px;
-  filter: invert(70%) sepia(94%) saturate(749%) hue-rotate(-17deg) brightness(1.1); /* stylized red */
+  background: #fff;
+  border-radius: 50%;
+  padding: 4px;
+  filter: grayscale(1) invert(1);
   transition: filter 0.18s;
 }
 .social-icons img:hover {
-  filter: invert(41%) sepia(46%) saturate(1497%) hue-rotate(-12deg) brightness(101%) contrast(110%);
+  filter: grayscale(0) invert(0);
+  background: #000B47;
 }
 .sidebar-link a {
-  color: #e5cb77;
-  background: #191717;
+  color: #fff;
+  background: #000;
   padding: 2px 7px;
   font-size: 0.93rem;
   text-decoration: none;
@@ -116,7 +129,7 @@ body {
 .main-content {
   margin-left: 340px;
   min-height: 100vh;
-  background: #1a1818;
+  background: #000B47;
   display: flex;
   flex-direction: column;
 }
@@ -125,7 +138,7 @@ body {
   position: relative;
   width: 100%;
   height: 540px;
-  background: #222;
+  background: #000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -145,7 +158,7 @@ body {
   pointer-events: none;
 }
 .arrow {
-  background: rgba(0,0,0,0.35);
+  background: rgba(0,0,0,0.45);
   color: #fff;
   font-size: 2.3rem;
   padding: 0 15px;
@@ -156,7 +169,8 @@ body {
   transition: background 0.2s;
 }
 .arrow:hover {
-  background: #e35e53;
+  background: #fff;
+  color: #000B47;
 }
 .carousel-dots {
   position: absolute;
@@ -177,16 +191,16 @@ body {
 }
 .dot.active {
   opacity: 1;
-  background: #e35e53;
+  background: #000;
   border: 2px solid #fff;
 }
 
 .category-bar {
   width: 100%;
-  background: #181515;
+  background: #000;
   display: flex;
   justify-content: center;
-  border-bottom: 3px solid #292525;
+  border-bottom: 3px solid #fff;
   margin-bottom: 0;
 }
 .category-bar ul {
@@ -202,7 +216,7 @@ body {
   text-align: center;
   font-size: 1.25rem;
   letter-spacing: 1px;
-  border-right: 1px solid #444;
+  border-right: 1px solid #fff;
 }
 .category-bar li:last-child {
   border-right: none;
@@ -216,7 +230,28 @@ body {
 }
 .category-bar a:hover,
 .category-bar li.active a {
-  background: #222;
-  color: #e5cb77;
+  background: #fff;
+  color: #000B47;
   font-weight: bold;
+}
+
+.portfolio-gallery {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 32px 24px;
+  background: #000B47;
+}
+.portfolio-gallery img {
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+  border: 4px solid #fff;
+  border-radius: 10px;
+  background: #000;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.portfolio-gallery img:hover {
+  border: 4px solid #000;
+  box-shadow: 0 0 16px #fff8, 0 0 4px #fff;
 }
