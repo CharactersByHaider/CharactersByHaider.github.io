@@ -10,15 +10,12 @@ import ProjectsSection from '@/components/ProjectsSection';
 import ExperienceSection from '@/components/ExperienceSection';
 import ContactSection from '@/components/ContactSection';
 import AdminPanel from '@/components/AdminPanel';
-import AdminLogin from '@/components/admin/AdminLogin';
-import { v4 as uuidv4 } from 'uuid';
 
 function App() {
   const { toast } = useToast();
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isNavVisible, setIsNavVisible] = useState(true);
   
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('portfolio-theme');
@@ -33,15 +30,6 @@ function App() {
 
   const [portfolioData, setPortfolioData] = useState(() => {
     const saved = localStorage.getItem('portfolio-data');
-    const defaultProjectElement = {
-      id: uuidv4(),
-      type: 'text', // 'text' or 'image'
-      content: 'Editable text content here.', // For text
-      src: '', // For images
-      position: { x: 50, y: 50 }, // 0-100 for left/top percentage
-      size: { width: 50, height: 'auto' }, // width as % of container, height auto or %
-      presetPosition: 'center-center', // e.g., 'top-left', 'center-center', 'bottom-right'
-    };
     const defaultData = {
       hero: {
         name: 'Muhammad Haider',
@@ -53,35 +41,27 @@ function App() {
       },
       projects: [
         {
-          id: uuidv4(),
+          id: 1,
           title: 'Project One',
-          description: 'Amazing project description here. This is used if layout is not custom.',
-          image: '', // Main project image for non-custom layouts
+          description: 'Amazing project description here',
+          image: '',
           actionImage: '',
           imageAspectRatio: '16/9', 
-          layout: 'imageRight', // imageRight, imageLeft, imageCenter, custom
-          elements: [
-            {...defaultProjectElement, content: 'Project One Intro Text', position: {x:10, y:10}},
-            {...defaultProjectElement, type: 'image', src: '', position: {x:60, y:30}, size:{width:30, height:'auto'}},
-          ] 
+          layout: 'imageRight'
         },
         {
-          id: uuidv4(),
+          id: 2,
           title: 'Project Two',
-          description: 'Another fantastic project. This is used if layout is not custom.',
+          description: 'Another fantastic project',
           image: '',
           actionImage: '',
           imageAspectRatio: '4/3',
-          layout: 'custom',
-          elements: [
-            {...defaultProjectElement, content: 'Explore the details of Project Two.', position: {x:50, y:20}, presetPosition: 'top-center'},
-            {...defaultProjectElement, type: 'image', src: '', position: {x:20, y:50}, size:{width:60, height:'auto'}, presetPosition: 'center-left'},
-          ]
+          layout: 'imageCenter'
         }
       ],
       experiences: [
         {
-          id: uuidv4(),
+          id: 1,
           title: 'Senior Designer',
           company: 'Creative Studio',
           period: '2020-2023',
@@ -89,7 +69,7 @@ function App() {
           duration: 3 
         },
         {
-          id: uuidv4(),
+          id: 2,
           title: 'Junior Designer',
           company: 'Design Agency',
           period: '2018-2020',
@@ -97,12 +77,28 @@ function App() {
           duration: 2
         },
         {
-          id: uuidv4(),
+          id: 3,
           title: 'Freelance Illustrator',
           company: 'Self-Employed',
           period: '2017-2018',
           description: 'Worked on various illustration projects for clients.',
           duration: 1
+        },
+        {
+          id: 4,
+          title: 'Design Intern',
+          company: 'Startup Inc.',
+          period: '2016-2017',
+          description: 'Assisted senior designers and learned industry tools.',
+          duration: 1
+        },
+        {
+          id: 5,
+          title: 'Graphic Design Student',
+          company: 'Art University',
+          period: '2012-2016',
+          description: 'Completed B.A. in Graphic Design.',
+          duration: 4
         }
       ],
       contact: {
@@ -111,24 +107,15 @@ function App() {
         artstation: 'https://artstation.com/muhammad-haider',
         phone: '+1 (555) 123-4567'
       },
-      yearRatio: 20,
-      adminUsers: [
-        { id: uuidv4(), username: 'haider1397', password: 'Admin' }
-      ]
+      yearRatio: 20 
     };
     if (saved) {
       const parsed = JSON.parse(saved);
+      // Ensure new fields have defaults if loading old data
       parsed.hero = { ...defaultData.hero, ...parsed.hero };
-      parsed.projects = parsed.projects.map(p => ({ 
-        ...defaultData.projects[0], 
-        id: p.id || uuidv4(), 
-        elements: (p.elements || []).map(el => ({...defaultProjectElement, ...el, id: el.id || uuidv4()})), 
-        ...p 
-      }));
-      parsed.experiences = parsed.experiences.map(e => ({ ...defaultData.experiences[0], id: e.id || uuidv4(), ...e }));
+      parsed.projects = parsed.projects.map(p => ({ ...defaultData.projects[0], ...p }));
+      parsed.experiences = parsed.experiences.map(e => ({ ...defaultData.experiences[0], ...e }));
       parsed.yearRatio = parsed.yearRatio || defaultData.yearRatio;
-      parsed.adminUsers = parsed.adminUsers || defaultData.adminUsers;
-      parsed.adminUsers = parsed.adminUsers.map(u => ({...u, id: u.id || uuidv4()}));
       return parsed;
     }
     return defaultData;
@@ -180,13 +167,6 @@ function App() {
     localStorage.setItem('portfolio-data', JSON.stringify(portfolioData));
   }, [portfolioData]);
 
-  useEffect(() => {
-    const sessionAuth = sessionStorage.getItem('portfolio-admin-auth');
-    if (sessionAuth === 'true') {
-      setIsAuthenticated(true);
-    }
-  }, []);
-
   const updateTheme = (newTheme) => {
     setTheme(prev => ({ ...prev, ...newTheme }));
   };
@@ -197,37 +177,6 @@ function App() {
       [section]: data
     }));
   };
-
-  const handleLogin = (username, password) => {
-    const user = portfolioData.adminUsers.find(
-      (u) => u.username === username && u.password === password
-    );
-    if (user) {
-      setIsAuthenticated(true);
-      sessionStorage.setItem('portfolio-admin-auth', 'true');
-      toast({ title: "Login Successful!", description: `Welcome back, ${username}!` });
-      setIsAdminOpen(true);
-      return true;
-    }
-    toast({ title: "Login Failed", description: "Invalid username or password.", variant: "destructive" });
-    return false;
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    sessionStorage.removeItem('portfolio-admin-auth');
-    setIsAdminOpen(false);
-    toast({ title: "Logged Out", description: "You have been successfully logged out." });
-  };
-  
-  const openAdminPanel = () => {
-    if (isAuthenticated) {
-      setIsAdminOpen(true);
-    } else {
-      setIsAdminOpen(true); 
-    }
-  };
-
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -249,15 +198,19 @@ function App() {
       </Helmet>
 
       <div className="min-h-screen relative custom-scrollbar">
-        <Navigation 
-          portfolioData={portfolioData}
-          isMobileMenuOpen={isMobileMenuOpen}
-          toggleMobileMenu={toggleMobileMenu}
-          scrollToSection={scrollToSection}
-        />
+        <AnimatePresence>
+          {isNavVisible && (
+            <Navigation 
+              portfolioData={portfolioData}
+              isMobileMenuOpen={isMobileMenuOpen}
+              toggleMobileMenu={toggleMobileMenu}
+              scrollToSection={scrollToSection}
+            />
+          )}
+        </AnimatePresence>
 
         <motion.button
-          onClick={openAdminPanel}
+          onClick={() => setIsAdminOpen(true)}
           className="fixed top-4 right-4 z-[60] p-3 glass-effect rounded-full hover:bg-red-500/20 transition-all duration-300"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -274,6 +227,7 @@ function App() {
           <ProjectsSection 
             projects={portfolioData.projects}
             theme={theme}
+            setIsNavVisible={setIsNavVisible}
           />
           
           <ExperienceSection 
@@ -288,22 +242,14 @@ function App() {
           />
         </main>
 
-        {isAdminOpen && !isAuthenticated && (
-           <AdminLogin onLogin={handleLogin} onClose={() => setIsAdminOpen(false)} />
-        )}
-
-        {isAdminOpen && isAuthenticated && (
-          <AdminPanel
-            isOpen={isAdminOpen}
-            onClose={() => setIsAdminOpen(false)}
-            onLogout={handleLogout}
-            theme={theme}
-            updateTheme={updateTheme}
-            portfolioData={portfolioData}
-            updatePortfolioData={updatePortfolioData}
-          />
-        )}
-        
+        <AdminPanel
+          isOpen={isAdminOpen}
+          onClose={() => setIsAdminOpen(false)}
+          theme={theme}
+          updateTheme={updateTheme}
+          portfolioData={portfolioData}
+          updatePortfolioData={updatePortfolioData}
+        />
 
         <Toaster />
       </div>

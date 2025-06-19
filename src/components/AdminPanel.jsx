@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Palette, Image, Settings as SettingsIcon, Users, Mail, Sliders, Shield, LogOut } from 'lucide-react';
+import { Palette, Image, Settings as SettingsIcon, Users, Mail, Sliders } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 import AdminSidebar from '@/components/admin/AdminSidebar';
@@ -11,11 +10,9 @@ import ProjectsSettingsTab from '@/components/admin/ProjectsSettingsTab';
 import ExperienceSettingsTab from '@/components/admin/ExperienceSettingsTab';
 import ContactSettingsTab from '@/components/admin/ContactSettingsTab';
 import PortfolioSettingsTab from '@/components/admin/PortfolioSettingsTab';
-import UserManagementTab from '@/components/admin/UserManagementTab';
 import ResetConfirmationModal from '@/components/admin/ResetConfirmationModal';
-import { v4 as uuidv4 } from 'uuid';
 
-const AdminPanel = ({ isOpen, onClose, onLogout, theme, updateTheme, portfolioData, updatePortfolioData }) => {
+const AdminPanel = ({ isOpen, onClose, theme, updateTheme, portfolioData, updatePortfolioData }) => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('theme');
   const [showResetConfirm, setShowResetConfirm] = useState(false);
@@ -26,8 +23,7 @@ const AdminPanel = ({ isOpen, onClose, onLogout, theme, updateTheme, portfolioDa
     { id: 'projects', label: 'Projects', icon: SettingsIcon },
     { id: 'experience', label: 'Experience', icon: Users },
     { id: 'contact', label: 'Contact', icon: Mail },
-    { id: 'userManagement', label: 'User Management', icon: Shield},
-    { id: 'settings', label: 'Portfolio', icon: Sliders },
+    { id: 'settings', label: 'Portfolio', icon: Sliders }
   ];
 
   const handleColorChange = (colorType, value) => {
@@ -38,10 +34,10 @@ const AdminPanel = ({ isOpen, onClose, onLogout, theme, updateTheme, portfolioDa
     updateTheme({ isDark: !theme.isDark });
   };
 
-  const handleImageUpload = (section, field, event, projectId = null, elementId = null) => {
+  const handleImageUpload = (section, field, event) => {
     const files = event.target.files;
     if (!files || files.length === 0) return;
-  
+
     const processFile = (file) => {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -50,21 +46,7 @@ const AdminPanel = ({ isOpen, onClose, onLogout, theme, updateTheme, portfolioDa
             ...portfolioData.hero,
             characterImages: [...(portfolioData.hero.characterImages || []), e.target.result]
           });
-        } else if (section === 'projects' && field === 'elements' && projectId && elementId) {
-          const updatedProjects = portfolioData.projects.map(p => {
-            if (p.id === projectId) {
-              return {
-                ...p,
-                elements: p.elements.map(el => 
-                  el.id === elementId ? { ...el, src: e.target.result, type: 'image' } : el
-                )
-              };
-            }
-            return p;
-          });
-          updatePortfolioData('projects', updatedProjects);
-        }
-         else {
+        } else {
           updatePortfolioData(section, {
             ...portfolioData[section],
             [field]: e.target.result
@@ -77,8 +59,8 @@ const AdminPanel = ({ isOpen, onClose, onLogout, theme, updateTheme, portfolioDa
       };
       reader.readAsDataURL(file);
     };
-  
-    if ((section === 'hero' && field === 'characterImages') || (section === 'projects' && field === 'elements' && files.length > 1)) {
+
+    if (field === 'characterImages' && files.length > 1) {
       Array.from(files).forEach(processFile);
     } else {
       processFile(files[0]);
@@ -87,14 +69,11 @@ const AdminPanel = ({ isOpen, onClose, onLogout, theme, updateTheme, portfolioDa
   
   const addProject = () => {
     const newProject = {
-      id: uuidv4(),
+      id: Date.now(),
       title: 'New Project',
       description: 'Project description',
       image: '',
-      actionImage: '',
-      imageAspectRatio: '16/9',
-      layout: 'imageRight',
-      elements: []
+      layout: 'imageRight'
     };
     updatePortfolioData('projects', [...portfolioData.projects, newProject]);
     toast({
@@ -121,7 +100,7 @@ const AdminPanel = ({ isOpen, onClose, onLogout, theme, updateTheme, portfolioDa
 
   const addExperience = () => {
     const newExperience = {
-      id: uuidv4(),
+      id: Date.now(),
       title: 'New Position',
       company: 'Company Name',
       period: '2023-2024',
@@ -179,13 +158,11 @@ const AdminPanel = ({ isOpen, onClose, onLogout, theme, updateTheme, portfolioDa
       case 'hero':
         return <HeroSettingsTab portfolioData={portfolioData} updatePortfolioData={updatePortfolioData} handleImageUpload={handleImageUpload} />;
       case 'projects':
-        return <ProjectsSettingsTab portfolioData={portfolioData} updatePortfolioData={updatePortfolioData} addProject={addProject} updateProject={updateProject} deleteProject={deleteProject} handleImageUpload={handleImageUpload} theme={theme} />;
+        return <ProjectsSettingsTab portfolioData={portfolioData} updatePortfolioData={updatePortfolioData} addProject={addProject} updateProject={updateProject} deleteProject={deleteProject} />;
       case 'experience':
         return <ExperienceSettingsTab portfolioData={portfolioData} updatePortfolioData={updatePortfolioData} addExperience={addExperience} updateExperience={updateExperience} deleteExperience={deleteExperience} />;
       case 'contact':
         return <ContactSettingsTab portfolioData={portfolioData} updatePortfolioData={updatePortfolioData} />;
-      case 'userManagement':
-        return <UserManagementTab portfolioData={portfolioData} updatePortfolioData={updatePortfolioData} />;
       case 'settings':
         return <PortfolioSettingsTab theme={theme} portfolioData={portfolioData} updateTheme={updateTheme} updatePortfolioData={updatePortfolioData} setShowResetConfirm={setShowResetConfirm} />;
       default:
@@ -215,7 +192,6 @@ const AdminPanel = ({ isOpen, onClose, onLogout, theme, updateTheme, portfolioDa
             setActiveTab={setActiveTab}
             onClose={onClose}
             onSaveChanges={saveChanges}
-            onLogout={onLogout}
           />
           
           <div className="flex-1 p-8 overflow-y-auto custom-scrollbar">

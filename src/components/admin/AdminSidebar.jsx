@@ -1,8 +1,7 @@
-
 import React from 'react';
-import { X, Save, LogOut } from 'lucide-react';
+import { X, Save } from 'lucide-react';
 
-const AdminSidebar = ({ tabs, activeTab, setActiveTab, onClose, onSaveChanges, onLogout }) => {
+const AdminSidebar = ({ tabs, activeTab, setActiveTab, onClose, onSaveChanges }) => {
   return (
     <div className="w-64 bg-gray-50 dark:bg-gray-800 p-6 border-r border-gray-200 dark:border-gray-700 flex flex-col">
       <div className="flex items-center justify-between mb-8">
@@ -32,20 +31,13 @@ const AdminSidebar = ({ tabs, activeTab, setActiveTab, onClose, onSaveChanges, o
         ))}
       </nav>
 
-      <div className="mt-auto pt-8 border-t border-gray-200 dark:border-gray-700 space-y-4">
+      <div className="mt-auto pt-8 border-t border-gray-200 dark:border-gray-700">
         <button
           onClick={onSaveChanges}
           className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
         >
           <Save className="w-5 h-5" />
           <span>Save Changes</span>
-        </button>
-        <button
-          onClick={onLogout}
-          className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-        >
-          <LogOut className="w-5 h-5" />
-          <span>Logout</span>
         </button>
       </div>
     </div>
